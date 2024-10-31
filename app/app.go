@@ -628,6 +628,10 @@ func NewWasmApp(
 		panic(fmt.Sprintf("error while reading wasm config: %s", err))
 	}
 
+	wasmOpts = append(wasmOpts, wasmkeeper.WithQueryPlugins(&wasmkeeper.QueryPlugins{
+		Stargate: wasmkeeper.AcceptListStargateQuerier(getAcceptedStargateQueries(), app.GRPCQueryRouter(), appCodec),
+	}))
+
 	// The last arguments can contain custom message handlers, and custom query handlers,
 	// if we want to allow any custom callbacks
 	app.WasmKeeper = wasmkeeper.NewKeeper(
@@ -1199,4 +1203,10 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 
 	paramsKeeper.Subspace(wasmtypes.ModuleName)
 	return paramsKeeper
+}
+
+func getAcceptedStargateQueries() wasmkeeper.AcceptedQueries {
+	return wasmkeeper.AcceptedQueries{
+		"/wasmd.ibc.v1.Query/VerifyMembership": &ibcclienttypes.QueryVerifyMembershipRequest{},
+	}
 }
