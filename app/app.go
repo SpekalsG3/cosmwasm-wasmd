@@ -1207,6 +1207,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 
 func getAcceptedStargateQueries() wasmkeeper.AcceptedQueries {
 	return wasmkeeper.AcceptedQueries{
-		"/wasmd.ibc.v1.Query/VerifyMembership": &ibcclienttypes.QueryVerifyMembershipRequest{},
+		"/ibc.core.client.v1.Query/VerifyMembership": &ibcclienttypes.QueryVerifyMembershipRequest{},
 	}
 }
